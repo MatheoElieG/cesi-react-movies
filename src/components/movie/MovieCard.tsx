@@ -40,8 +40,8 @@ export const MovieCard = ({
           </Link>
         )}
 
-        <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
-          <div className="bg-white/90 backdrop-blur-sm text-gray-900 px-2.5 py-1 rounded-md flex items-center gap-1 text-sm font-medium shadow-sm">
+        <div className="absolute top-0 left-0 right-0 flex justify-between items-start">
+          <div className="m-3 bg-white/90 backdrop-blur-sm text-gray-900 px-2.5 py-1 rounded-md flex items-center gap-1 text-sm font-medium shadow-sm">
             <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
             <span>{vote_average.toFixed(1)}</span>
           </div>

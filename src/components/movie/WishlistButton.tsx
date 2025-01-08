@@ -20,6 +20,7 @@ export const WishlistButton = ({
     return (
       <button
         title="Remove from whishlist"
+        className="p-3"
         onClick={() => {
           removeFromWishlist(movieId);
 
@@ -37,6 +38,7 @@ export const WishlistButton = ({
     return (
       <button
         title="Add to whishlist"
+        className="p-3"
         onClick={() => {
           addToWishlist(movieId);
 
@@ -45,7 +47,7 @@ export const WishlistButton = ({
           }
         }}
       >
-        <Heart stroke="#ff4d4d" />
+        <Heart stroke="#ff4d4d" className="h-6 w-6" />
       </button>
     );
   }
