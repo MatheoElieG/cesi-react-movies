@@ -33,11 +33,13 @@ export const MovieCard = ({
         </Link>
       )}
       {!poster_path && (
-        <UnknownImage classNames="aspect-[2/3] rounded-md overflow-hidden" />
+        <Link to={details} className="aspect-[2/3] rounded-md overflow-hidden">
+          <UnknownImage classNames="aspect-[2/3] rounded-md overflow-hidden" />
+        </Link>
       )}
       <div className="p-4">
         <h2 className="text-md font-semibold">{title}</h2>
-        <p>{vote_average.toFixed(1)} / 10</p>
+        <p>{vote_average.toFixed(1)} ⭐ / 10</p>
         <div className="flex items-center gap-2 mt-2">
           <Link to={details}>
             <Button>See details</Button>

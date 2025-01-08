@@ -14,7 +14,7 @@ export const SimilarMovies = ({
   useEffect(() => {
     const fetchSimilar = async (id: number) => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}/similar?api_key=1cc385c99bf79dda95203d04ef39941f`,
+        `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${import.meta.env.VITE_TMD_API_KEY}`,
       );
 
       if (response.status === 404) {

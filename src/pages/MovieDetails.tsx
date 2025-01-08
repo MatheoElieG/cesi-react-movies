@@ -20,7 +20,7 @@ export const MovieDetails = () => {
       setLoading(true);
 
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}?api_key=1cc385c99bf79dda95203d04ef39941f`,
+        `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMD_API_KEY}`,
       );
 
       if (response.status === 404) {
@@ -58,8 +58,7 @@ export const MovieDetails = () => {
         )}
 
         {from && from !== "wishlist" && (
-          <Link
-            to={"/"}
+          <button
             onClick={(e) => {
               e.preventDefault();
               navigate(-1);
@@ -67,7 +66,7 @@ export const MovieDetails = () => {
             className="bg-cyan-500 py-2 px-4 rounded-md text-white text-sm"
           >
             Back to {from}
-          </Link>
+          </button>
         )}
 
         {!from && (

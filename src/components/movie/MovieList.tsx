@@ -6,8 +6,6 @@ import { MovieCard } from "./MovieCard.tsx";
 import { MovieCardSkeleton } from "./MovieCardSkeleton.tsx";
 import { emptyList } from "../../utils/empty-list.ts";
 
-const API = "1cc385c99bf79dda95203d04ef39941f";
-
 export const MovieList = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [query, setQuery] = useState<string>("");
@@ -21,8 +19,8 @@ export const MovieList = () => {
 
     const response = await fetch(
       query === ""
-        ? `https://api.themoviedb.org/3/movie/popular?api_key=${API}&page=${page}`
-        : `https://api.themoviedb.org/3/search/movie?api_key=${API}&query=${query}&page=${page}`,
+        ? `https://api.themoviedb.org/3/movie/popular?api_key=${import.meta.env.VITE_TMD_API_KEY}&page=${page}`
+        : `https://api.themoviedb.org/3/search/movie?api_key=${import.meta.env.VITE_TMD_API_KEY}&query=${query}&page=${page}`,
     );
 
     if (!response.ok) {
