@@ -1,6 +1,6 @@
 # Requirements
 
-- Node > 20 
+- Node > 20
 
 # Start the project
 

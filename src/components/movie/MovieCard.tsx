@@ -19,7 +19,7 @@ export const MovieCard = ({
   return (
     <div
       key={id}
-      className="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform-gpu"
+      className="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all transform-gpu"
     >
       <div className="relative">
         {poster_path ? (
@@ -30,9 +30,9 @@ export const MovieCard = ({
             <img
               alt={title}
               src={`https://image.tmdb.org/t/p/original/${poster_path}`}
-              className="object-cover object-center w-full h-full transform group-hover:scale-105 transition-transform duration-300"
+              className="object-cover object-center w-full h-full transform group-hover:scale-105 transition-transform"
             />
-            <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
+            <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors" />
           </Link>
         ) : (
           <Link to={details} className="block aspect-[2/3] overflow-hidden">
@@ -51,7 +51,7 @@ export const MovieCard = ({
 
       <div className="p-4">
         <Link to={details}>
-          <h2 className="text-lg font-medium text-gray-900 line-clamp-2 mb-4 hover:text-gray-700 transition-colors duration-200">
+          <h2 className="text-lg font-medium text-gray-900 line-clamp-1 mb-4">
             {title}
           </h2>
         </Link>

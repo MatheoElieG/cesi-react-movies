@@ -9,8 +9,8 @@ import { ArrowLeft, Calendar, Star } from "lucide-react";
 import { Button } from "../components/shared/Button.tsx";
 
 export const MovieDetails = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ export const MovieDetails = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMD_API_KEY}`,
+          `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMDB_API_KEY}`,
         );
 
         if (response.status === 404) {
@@ -57,41 +57,10 @@ export const MovieDetails = () => {
 
   if (!movie) return null;
 
-  const BackButton = () => {
-    if (from === "wishlist") {
-      return (
-        <Link to="/wishlist">
-          <Button>
-            <ArrowLeft className="w-4 h-4" />
-            Back to wishlist
-          </Button>
-        </Link>
-      );
-    }
-
-    if (from && from !== "wishlist") {
-      return (
-        <Button onClick={() => navigate(-1)}>
-          <ArrowLeft className="w-4 h-4" />
-          Back to {from}
-        </Button>
-      );
-    }
-
-    return (
-      <Link to="/">
-        <Button>
-          <ArrowLeft className="w-4 h-4" />
-          Back to popular movies
-        </Button>
-      </Link>
-    );
-  };
-
   return (
     <>
       <div className="flex items-center justify-between">
-        <BackButton />
+        <BackButton from={from} />
         <WishlistButton movieId={movie.id} />
       </div>
       <div className="space-y-8 mt-4">
@@ -147,16 +116,49 @@ export const MovieDetails = () => {
               </div>
             </div>
 
-            <section className="pt-6">
+            <section className="pt-4">
               <SimilarMovies movieId={movie.id} fromMovie={movie.title} />
             </section>
           </div>
 
-          <aside className="md:col-span-1">
+          <aside>
             <MovieCast movieId={movie.id} />
           </aside>
         </div>
       </div>
     </>
+  );
+};
+
+const BackButton = ({ from }: { from: string | null }) => {
+  const navigate = useNavigate();
+
+  if (from === "wishlist") {
+    return (
+      <Link to="/wishlist">
+        <Button>
+          <ArrowLeft className="w-4 h-4" />
+          Back to wishlist
+        </Button>
+      </Link>
+    );
+  }
+
+  if (from && from !== "wishlist") {
+    return (
+      <Button onClick={() => navigate(-1)}>
+        <ArrowLeft className="w-4 h-4" />
+        Back to {from}
+      </Button>
+    );
+  }
+
+  return (
+    <Link to="/">
+      <Button>
+        <ArrowLeft className="w-4 h-4" />
+        Back to popular movies
+      </Button>
+    </Link>
   );
 };

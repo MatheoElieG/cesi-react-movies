@@ -19,8 +19,8 @@ export const MovieList = () => {
 
     const response = await fetch(
       query === ""
-        ? `https://api.themoviedb.org/3/movie/popular?api_key=${import.meta.env.VITE_TMD_API_KEY}&page=${page}`
-        : `https://api.themoviedb.org/3/search/movie?api_key=${import.meta.env.VITE_TMD_API_KEY}&query=${query}&page=${page}`,
+        ? `https://api.themoviedb.org/3/movie/popular?api_key=${import.meta.env.VITE_TMDB_API_KEY}&page=${page}`
+        : `https://api.themoviedb.org/3/search/movie?api_key=${import.meta.env.VITE_TMDB_API_KEY}&query=${query}&page=${page}`,
     );
 
     if (!response.ok) {
