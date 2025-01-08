@@ -11,9 +11,9 @@ export const MovieCast = ({ movieId }: { movieId: number }) => {
     );
 
     if (response.status === 404) {
-      // TODO
+      throw new Error("Movie not found.");
     } else if (response.status !== 200) {
-      // TODO
+      throw new Error("Could not find movie results.");
     }
 
     const json: MovieCredits = await response.json();

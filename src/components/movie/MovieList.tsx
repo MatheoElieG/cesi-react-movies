@@ -14,8 +14,8 @@ export const MovieList = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchMovies = async (query: string = "", page: number = 1) => {
-    setIsLoading(true);
     setCurrPage(page);
+    setIsLoading(true);
 
     const response = await fetch(
       query === ""
@@ -24,7 +24,7 @@ export const MovieList = () => {
     );
 
     if (!response.ok) {
-      // TODO
+      throw new Error("Could not find movie results.");
     }
 
     const json: {

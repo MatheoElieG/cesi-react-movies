@@ -18,9 +18,9 @@ export const SimilarMovies = ({
       );
 
       if (response.status === 404) {
-        // TODO
+        throw new Error("Movie not found.");
       } else if (response.status !== 200) {
-        // TODO
+        throw new Error("Could not find movie results.");
       }
 
       const json = await response.json();
@@ -37,7 +37,7 @@ export const SimilarMovies = ({
   return (
     <>
       <h2 className="text-xl font-semibold mt-4">Similar movies</h2>
-      <div className="grid grid-cols-5 gap-4 mt-2">
+      <div className="grid grid-cols-4 gap-4 mt-2">
         {similarMovies.map((movie: Movie) => (
           <MovieCard
             key={movie.id}

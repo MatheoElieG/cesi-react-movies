@@ -1,8 +1,9 @@
 import { Link } from "react-router";
-import { Button } from "../shared/Button.tsx";
 import { Movie } from "../../types/movie.ts";
 import { UnknownImage } from "../shared/UnknownImage.tsx";
 import { WishlistButton } from "./WishlistButton.tsx";
+import { Star } from "lucide-react";
+import { Button } from "../shared/Button.tsx";
 
 export const MovieCard = ({
   id,
@@ -18,35 +19,46 @@ export const MovieCard = ({
   return (
     <div
       key={id}
-      className="bg-white rounded-md shadow overflow-hidden scale-[0.97] hover:scale-100 transition-transform transform-gpu"
+      className="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform-gpu"
     >
-      {poster_path && (
-        <Link
-          to={details}
-          className="overflow-hidden aspect-[2/3] flex items-stretch justify-stretch"
-        >
-          <img
-            alt={title}
-            src={`https://image.tmdb.org/t/p/original/${poster_path}`}
-            className="object-cover object-center"
-          />
-        </Link>
-      )}
-      {!poster_path && (
-        <Link to={details} className="aspect-[2/3] rounded-md overflow-hidden">
-          <UnknownImage classNames="aspect-[2/3] rounded-md overflow-hidden" />
-        </Link>
-      )}
-      <div className="p-4">
-        <h2 className="text-md font-semibold">{title}</h2>
-        <p>{vote_average.toFixed(1)} ⭐ / 10</p>
-        <div className="flex items-center gap-2 mt-2">
-          <Link to={details}>
-            <Button>See details</Button>
+      <div className="relative">
+        {poster_path ? (
+          <Link
+            to={details}
+            className="block overflow-hidden aspect-[2/3] relative"
+          >
+            <img
+              alt={title}
+              src={`https://image.tmdb.org/t/p/original/${poster_path}`}
+              className="object-cover object-center w-full h-full transform group-hover:scale-105 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
           </Link>
+        ) : (
+          <Link to={details} className="block aspect-[2/3] overflow-hidden">
+            <UnknownImage classNames="aspect-[2/3] w-full h-full" />
+          </Link>
+        )}
 
+        <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
+          <div className="bg-white/90 backdrop-blur-sm text-gray-900 px-2.5 py-1 rounded-md flex items-center gap-1 text-sm font-medium shadow-sm">
+            <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+            <span>{vote_average.toFixed(1)}</span>
+          </div>
           <WishlistButton movieId={id} />
         </div>
+      </div>
+
+      <div className="p-4">
+        <Link to={details}>
+          <h2 className="text-lg font-medium text-gray-900 line-clamp-2 mb-4 hover:text-gray-700 transition-colors duration-200">
+            {title}
+          </h2>
+        </Link>
+
+        <Link to={details}>
+          <Button>View details</Button>
+        </Link>
       </div>
     </div>
   );

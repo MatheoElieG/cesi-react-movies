@@ -5,6 +5,8 @@ import { MovieCast } from "../components/movie/MovieCast.tsx";
 import { SimilarMovies } from "../components/movie/SimilarMovies.tsx";
 import { UnknownImage } from "../components/shared/UnknownImage.tsx";
 import { WishlistButton } from "../components/movie/WishlistButton.tsx";
+import { ArrowLeft, Calendar, Star } from "lucide-react";
+import { Button } from "../components/shared/Button.tsx";
 
 export const MovieDetails = () => {
   const navigate = useNavigate();
@@ -18,112 +20,143 @@ export const MovieDetails = () => {
   useEffect(() => {
     const fetchMovie = async (id: string) => {
       setLoading(true);
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMD_API_KEY}`,
+        );
 
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMD_API_KEY}`,
-      );
+        if (response.status === 404) {
+          navigate("/404");
+          return;
+        }
 
-      if (response.status === 404) {
-        // TODO
-      } else if (response.status !== 200) {
-        // TODO
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch movie details");
+        }
+
+        const json: Movie = await response.json();
+        setMovie(json);
+      } catch (error) {
+        console.error("Error fetching movie:", error);
+      } finally {
+        setLoading(false);
       }
-
-      const json: Movie = await response.json();
-      setMovie(json);
-      setLoading(false);
     };
 
-    if (!id) {
-      return;
-    }
-
+    if (!id) return;
     void fetchMovie(id);
-  }, [id]);
+  }, [id, navigate]);
 
-  if (loading || !movie) {
-    return null;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-pulse text-gray-400">Loading...</div>
+      </div>
+    );
   }
 
-  return (
-    <div>
-      <div className="mb-4 flex items-center gap-2">
-        {from === "wishlist" && (
-          <Link
-            to={"/wishlist"}
-            className="bg-cyan-500 py-2 px-4 rounded-md text-white text-sm"
-          >
+  if (!movie) return null;
+
+  const BackButton = () => {
+    if (from === "wishlist") {
+      return (
+        <Link to="/wishlist">
+          <Button>
+            <ArrowLeft className="w-4 h-4" />
             Back to wishlist
-          </Link>
-        )}
+          </Button>
+        </Link>
+      );
+    }
 
-        {from && from !== "wishlist" && (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              navigate(-1);
-            }}
-            className="bg-cyan-500 py-2 px-4 rounded-md text-white text-sm"
-          >
-            Back to {from}
-          </button>
-        )}
+    if (from && from !== "wishlist") {
+      return (
+        <Button onClick={() => navigate(-1)}>
+          <ArrowLeft className="w-4 h-4" />
+          Back to {from}
+        </Button>
+      );
+    }
 
-        {!from && (
-          <Link
-            to={"/"}
-            className="bg-cyan-500 py-2 px-4 rounded-md text-white text-sm"
-          >
-            Back to popular movies
-          </Link>
-        )}
+    return (
+      <Link to="/">
+        <Button>
+          <ArrowLeft className="w-4 h-4" />
+          Back to popular movies
+        </Button>
+      </Link>
+    );
+  };
 
+  return (
+    <>
+      <div className="flex items-center justify-between">
+        <BackButton />
         <WishlistButton movieId={movie.id} />
       </div>
-      <div className="flex gap-6">
-        <div className="w-full md:w-2/3">
-          <div className="grid gap-4">
-            {movie.backdrop_path && (
-              <div className="aspect-video rounded-md overflow-hidden">
-                <img
-                  alt={movie.title}
-                  className="w-full h-full object-cover object-center"
-                  src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-                />
-              </div>
-            )}
-            {!movie.backdrop_path && (
-              <UnknownImage classNames="aspect-video rounded-md overflow-hidden" />
-            )}
-            <div className="flex-col-reverse md:flex-row flex gap-4">
-              {movie.poster_path && (
-                <div className="aspect-[2/3] rounded-md overflow-hidden min-w-[200px] w-[200px]">
+      <div className="space-y-8 mt-4">
+        <div className="relative rounded-xl overflow-hidden">
+          {movie.backdrop_path ? (
+            <div className="aspect-[21/9] relative">
+              <img
+                alt={movie.title}
+                className="w-full h-full object-cover"
+                src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+            </div>
+          ) : (
+            <UnknownImage classNames="aspect-[21/9]" />
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 space-y-6">
+            <div className="flex gap-6 flex-col md:flex-row">
+              <div className="w-full md:w-[240px] flex-shrink-0">
+                {movie.poster_path ? (
                   <img
                     alt={movie.title}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full rounded-lg shadow-lg aspect-[2/3] object-cover"
                     src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                   />
+                ) : (
+                  <UnknownImage classNames="w-full rounded-lg shadow-lg aspect-[2/3]" />
+                )}
+              </div>
+
+              <div className="flex-1 space-y-4">
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {movie.title}
+                </h1>
+
+                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    <span>{movie.release_date}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                    <span>{movie.vote_average.toFixed(1)} / 10</span>
+                  </div>
                 </div>
-              )}
-              {!movie.poster_path && (
-                <UnknownImage classNames="aspect-[2/3] min-w-[200px] w-[200px] rounded-md overflow-hidden" />
-              )}
-              <div>
-                <h1 className="text-xl font-semibold mb-2">{movie.title}</h1>
-                <p className="text-sm mb-4">
-                  {movie.release_date} - {movie.vote_average.toFixed(1)} ⭐ / 10{" "}
+
+                <p className="text-gray-600 leading-relaxed">
+                  {movie.overview}
                 </p>
-                <p>{movie.overview}</p>
               </div>
             </div>
+
+            <section className="pt-6">
+              <SimilarMovies movieId={movie.id} fromMovie={movie.title} />
+            </section>
           </div>
-          <div className="mt-4"></div>
-        </div>
-        <div className="w-full md:w-1/3">
-          <MovieCast movieId={movie.id} />
+
+          <aside className="md:col-span-1">
+            <MovieCast movieId={movie.id} />
+          </aside>
         </div>
       </div>
-      <SimilarMovies movieId={movie.id} fromMovie={movie.title} />
-    </div>
+    </>
   );
 };
